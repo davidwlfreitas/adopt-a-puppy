@@ -16,6 +16,12 @@ model Puppy {
   name      String
   breed     String
   age       Int
+  gender   String
+  isVaccinated Boolean
+  isNeutered Boolean
+  size      String
+  traits    String
+  photo     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -28,4 +34,3 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-

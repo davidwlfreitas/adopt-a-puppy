@@ -6,12 +6,12 @@ const app = fastify();
 
 const prisma = new PrismaClient();
 
-app.get('/users', async (request, reply) => {
+app.get('/users', async () => {
     const users = await prisma.user.findMany();
     return users;
 });
 
-app.get('/puppies', async (request, reply) => {
+app.get('/puppies', async () => {
     const puppies = await prisma.puppy.findMany();
     return puppies;
 });
@@ -20,16 +20,28 @@ app.post('/puppies', async (request, reply) => {
     const createPuppySchema = z.object({
         name: z.string(),
         breed: z.string(),
-        age: z.number().optional(),
+        age: z.number(),
+        gender: z.string(),
+        size: z.string(),
+        traits: z.string(), 
+        photo: z.string(),
+        isVaccinated: z.boolean(),
+        isNeutered: z.boolean(),
     });
 
-    const { name, breed } = createPuppySchema.parse(request.body);
+    const { name, breed, age, gender, size, traits, photo, isVaccinated, isNeutered } = createPuppySchema.parse(request.body);
 
     const puppy = await prisma.puppy.create({
         data: {
             name,
             breed,
-            age: 0,
+            age,
+            gender,
+            size,
+            traits,
+            photo,
+            isVaccinated,
+            isNeutered,
         }
     });
     
