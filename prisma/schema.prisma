@@ -15,15 +15,18 @@ model Puppy {
   id        Int      @id @default(autoincrement())
   name      String
   breed     String
-  age       Int
+  age       Int?
   gender   String
-  isVaccinated Boolean
-  isNeutered Boolean
-  size      String
-  traits    String
-  photo     String
+  isVaccinated Boolean?
+  isNeutered Boolean?
+  size      String?
+  traits    String?
+  photo     String?
+  medicalHistory String?
+  adoptionRequirements String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  adoptions Adoption[] @relation()
 }
 
 model User {
@@ -31,6 +34,26 @@ model User {
   name      String
   email     String   @unique
   password  String
+  identity  String?
+  proofOfAddress String?
+  role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  adoptions Adoption[] @relation()
+}
+
+model Adoption {
+  id        Int      @id @default(autoincrement())
+  puppy     Puppy    @relation(fields: [puppyId], references: [id])
+  puppyId   Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  References String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
 }
