@@ -6,14 +6,12 @@ import z from "zod";
 
 const prisma = new PrismaClient();
 
-export async function getUsers(fastify: FastifyInstance) {
+export async function manageUsers(fastify: FastifyInstance) {
     fastify.get('/users', async (request: FastifyRequest) => {
         const users = await prisma.user.findMany();
         return users;
     });
-}
-  
-export async function createUser(fastify: FastifyInstance) {
+
     fastify.post('/users', async (request: FastifyRequest, reply: FastifyReply) => {
         const createUserSchema = z.object({
             name: z.string(),
@@ -33,9 +31,7 @@ export async function createUser(fastify: FastifyInstance) {
 
         reply.status(201).send(user);
     });
-}
 
-export async function updateUser(fastify: FastifyInstance) {
     fastify.put('/users/:id', async (request: FastifyRequest, reply: FastifyReply) => {
         const updateUserSchema = z.object({
             name: z.string().optional(),
@@ -67,7 +63,7 @@ export async function updateUser(fastify: FastifyInstance) {
     });
 }
 
-export async function getPuppies(fastify: FastifyInstance) {
+export async function managePuppies(fastify: FastifyInstance) {
     fastify.get('/puppies', async (request: FastifyRequest, reply: FastifyReply) => {
         const { searchQuery, filterBy } = request.query as { searchQuery?: string, filterBy?: string } || { searchQuery: null, filterBy: null };
 
@@ -119,9 +115,7 @@ export async function getPuppies(fastify: FastifyInstance) {
             reply.status(500).send({ error: 'An error occurred while processing the request.' });
         }
     });
-}
 
-export async function getPuppy(fastify: FastifyInstance) {
     fastify.get('/puppies/:id', async (request: FastifyRequest, reply: FastifyReply) => {
         const { id } = request.params as { id?: string } || { id: null };
 
@@ -139,9 +133,7 @@ export async function getPuppy(fastify: FastifyInstance) {
 
         reply.status(200).send(puppy);
     });
-}
 
-export async function createPuppy(fastify: FastifyInstance) {
     fastify.post('/puppies', async (request: FastifyRequest, reply: FastifyReply) => {
         const createPuppySchema = z.object({
             name: z.string(),
@@ -173,9 +165,7 @@ export async function createPuppy(fastify: FastifyInstance) {
         
         reply.status(201).send(puppy);
     });
-}
 
-export async function updatePuppy(fastify: FastifyInstance) {
     fastify.put('/puppies/:id', async (request: FastifyRequest, reply: FastifyReply) => {
         const updatePuppySchema = z.object({
             name: z.string().optional(),
@@ -215,9 +205,7 @@ export async function updatePuppy(fastify: FastifyInstance) {
     
         reply.status(200).send(puppy);
     });
-}
 
-export async function deletePuppy(fastify: FastifyInstance) {
     fastify.delete('/puppies/:id', async (request: FastifyRequest, reply: FastifyReply) => {
         const { id } = request.params as { id?: string } || { id: null };
 
@@ -233,9 +221,7 @@ export async function deletePuppy(fastify: FastifyInstance) {
 
         reply.status(204).send();
     });
-}
 
-export async function adoptPuppy(fastify: FastifyInstance) {
     fastify.post('/puppies/adoption', async (request: FastifyRequest, reply: FastifyReply) => {
         const createAdoptionSchema = z.object({
             puppyId: z.number(),
